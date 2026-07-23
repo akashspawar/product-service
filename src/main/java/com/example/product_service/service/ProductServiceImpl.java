@@ -1,5 +1,7 @@
 package com.example.product_service.service;
 
+import com.example.product_service.dto.ProductRequestDto;
+import com.example.product_service.dto.ProductResponseDto;
 import com.example.product_service.entity.Product;
 import com.example.product_service.exception.ProductNotFoundException;
 import com.example.product_service.repository.ProductRepository;
@@ -20,8 +22,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product addProduct(Product product) {
-        return repository.save(product);
+    public ProductResponseDto addProduct(ProductRequestDto dto) {
+        Product product = new Product();
+         //Convert DTO → Entity
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setQuantity(dto.getQuantity());
+//after saving
+        Product save = repository.save(product);
+//Convert Entity → Response DTO
+        ProductResponseDto response = new ProductResponseDto();
+
+        response.setName(save.getName());
+        response.setDescription(save.getDescription());
+        response.setPrice(save.getPrice());
+        response.setQuantity(save.getQuantity());
+
+        return response;
     }
 
     @Override

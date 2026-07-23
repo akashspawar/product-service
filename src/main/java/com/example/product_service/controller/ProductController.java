@@ -1,5 +1,7 @@
 package com.example.product_service.controller;
 
+import com.example.product_service.dto.ProductRequestDto;
+import com.example.product_service.dto.ProductResponseDto;
 import com.example.product_service.service.ProductService;
 import com.example.product_service.entity.Product;
 import jakarta.validation.Valid;
@@ -22,9 +24,9 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> saveProduct(@Valid @RequestBody Product product){
-        Product product1 = service.addProduct(product);
-        return ResponseEntity.status(HttpStatus.CREATED).body(product1);
+    public ResponseEntity<ProductResponseDto> saveProduct(@Valid @RequestBody ProductRequestDto dto){
+        ProductResponseDto response = service.addProduct(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
