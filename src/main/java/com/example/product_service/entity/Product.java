@@ -11,6 +11,7 @@ public class Product {
     private Long id;
 
     @NotBlank(message = "product name cannot be blank")
+    @Size(min = 3, max = 50)
     @Column(nullable = false)
     private String name;
 
