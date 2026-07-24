@@ -50,8 +50,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAll() {
-        List<Product> allProducts = service.getAllProducts();
+    public ResponseEntity<List<ProductResponseDto>> getAll() {
+        List<ProductResponseDto> allProducts = service.getAllProducts();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(
                         ResponseBuilder.success(
@@ -66,9 +66,16 @@ public class ProductController {
     @Operation(
             summary = "Get Product",
             description = "Fetch product by id")
-    public ResponseEntity<Product> getProduct(@PathVariable Long id) {
-        Product product = service.getProduct(id);
-        return ResponseEntity.status(HttpStatus.OK).body(product);
+    public ResponseEntity<ApiResponse<ProductResponseDto>> getProduct(@PathVariable Long id) {
+        ProductResponseDto response = service.getProduct(id);
+        return ResponseEntity.ok(
+                ResponseBuilder.success(
+                        "get particular product",
+                        response,
+                        HttpStatus.OK
+                )
+        );
+       // return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/{id}")
