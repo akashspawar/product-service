@@ -6,6 +6,8 @@ import com.example.product_service.dto.ProductResponseDto;
 import com.example.product_service.dto.ResponseBuilder;
 import com.example.product_service.service.ProductService;
 import com.example.product_service.entity.Product;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,8 @@ import java.util.List;
 @RequestMapping("/products")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Product API",
+        description = "Product Management APIs")
 public class ProductController {
 
 
@@ -28,6 +32,9 @@ public class ProductController {
     private static final Logger logs = LoggerFactory.getLogger(ProductController.class);
 
     @PostMapping
+    @Operation(
+            summary = "Create Product",
+            description = "Creates a new product")
     public ResponseEntity<ApiResponse<ProductResponseDto>> saveProduct(@Valid @RequestBody ProductRequestDto dto) {
         ProductResponseDto productDto = service.addProduct(dto);
         logs.info("updated product details: {}", productDto);
@@ -56,6 +63,9 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Get Product",
+            description = "Fetch product by id")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
         Product product = service.getProduct(id);
         return ResponseEntity.status(HttpStatus.OK).body(product);
@@ -74,6 +84,8 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Delete Product")
     public ResponseEntity<ApiResponse<ProductResponseDto>> deleteProduct(@PathVariable Long id) {
         service.deleteProduct(id);
         return ResponseEntity.ok(
