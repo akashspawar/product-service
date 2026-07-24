@@ -33,28 +33,23 @@ public class ProductServiceImpl implements ProductService {
         Product save = repository.save(product);
 //Convert Entity → Response DTO
         ProductResponseDto response = new ProductResponseDto();
-
+        response.setId(save.getId());
         response.setName(save.getName());
         response.setDescription(save.getDescription());
         response.setPrice(save.getPrice());
         response.setQuantity(save.getQuantity());
-
         return response;
     }
 
     @Override
     public List<Product> getAllProducts() {
-        
         return repository.findAll();
     }
 
     @Override
     public Product getProduct(Long id) {
         return repository.findById(id)
-                .orElseThrow(() ->
-                        new ProductNotFoundException(
-                                "Product not found with id : " + id));
-
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + id));
     }
 
     @Override
@@ -65,19 +60,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updateProduct(Product product, Long id) {
-
-        System.out.println("Update API called with id = " + id);
-
-        Product product1 = repository.findById(id)
+    public ProductResponseDto updateProduct(ProductRequestDto dto, Long id) {
+// Step 1: Fetch existing product
+        Product product = repository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + id));
-
-
-            product1.setName(product.getName());
-            product1.setDescription(product.getDescription());
-            product1.setPrice(product.getPrice());
-            product1.setQuantity(product.getQuantity());
-
-        return  repository.save(product1);
+        // Step 2: Update fields
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setQuantity(dto.getQuantity());
+        // Step 3: Save updated entity
+        Product updatedProduct = repository.save(product);
+        // Step 4: Convert Entity -> Response DTO
+        ProductResponseDto response = new ProductResponseDto();
+        response.setId(updatedProduct.getId());
+        response.setName(updatedProduct.getName());
+        response.setDescription(updatedProduct.getDescription());
+        response.setPrice(updatedProduct.getPrice());
+        response.setQuantity(updatedProduct.getQuantity());
+        return response;
     }
 }

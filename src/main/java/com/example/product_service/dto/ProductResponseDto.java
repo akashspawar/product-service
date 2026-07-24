@@ -12,15 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductResponseDto {
 
-    @NotBlank(message = "Product name cannot be blank")
+    private Long id;
     private String name;
-
     private String description;
-
-    @NotNull(message = "Price is required")
     private Double price;
-
-    @NotNull(message = "Quantity is required")
     private Integer quantity;
 
 }
