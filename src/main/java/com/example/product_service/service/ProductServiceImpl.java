@@ -5,24 +5,26 @@ import com.example.product_service.dto.ProductResponseDto;
 import com.example.product_service.entity.Product;
 import com.example.product_service.exception.ProductNotFoundException;
 import com.example.product_service.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
+@Slf4j
 public class ProductServiceImpl implements ProductService {
 
-    @Autowired
     private final ProductRepository repository;
 
-
-    public ProductServiceImpl(ProductRepository repository) {
-        this.repository = repository;
-    }
+    private static final Logger logs = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Override
     public ProductResponseDto addProduct(ProductRequestDto dto) {
+        log.info("Saving new product: {}", dto.getName());
         Product product = new Product();
          //Convert DTO → Entity
         product.setName(dto.getName());
@@ -31,6 +33,7 @@ public class ProductServiceImpl implements ProductService {
         product.setQuantity(dto.getQuantity());
 //after saving
         Product save = repository.save(product);
+        log.info("Product saved successfully with id {}", save.getId());
 //Convert Entity → Response DTO
         ProductResponseDto response = new ProductResponseDto();
         response.setId(save.getId());
@@ -48,14 +51,19 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getProduct(Long id) {
-        return repository.findById(id)
+        logs.info("Fetching product with id {}", id);
+        Product product = repository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + id));
+         log.info("Product found successfully with id {}", id);
+        return product;
     }
 
     @Override
     public void deleteProduct(Long id) {
+        logs.info("getting deleted ID is{}",id);
         Product product = repository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + id));
+        logs.info("Deleted ID is: {}",id);
          repository.delete(product);
     }
 
