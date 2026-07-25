@@ -106,13 +106,13 @@ public class ProductController {
         );
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<ProductResponseDto>>> searchByName(@RequestParam String name) {
-        List<ProductResponseDto> byName = service.findByName(name);
+    @GetMapping("/GreaterThanPrice")
+    public ResponseEntity<ApiResponse<List<ProductResponseDto>>> priceGreaterThan(@RequestParam Double price){
+        List<ProductResponseDto> byPriceLessThan = service.findByPriceLessThan(price);
         return ResponseEntity.ok(
                 ResponseBuilder.success(
-                        "Fetch date using Name.........",
-                        byName,
+                        "getting conditional result",
+                        byPriceLessThan,
                         HttpStatus.OK
                 )
         );

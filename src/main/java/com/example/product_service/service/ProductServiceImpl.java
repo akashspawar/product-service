@@ -69,11 +69,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponseDto> findByName(String name) {
-        return repository.findByName(name)
+    public List<ProductResponseDto> findByPriceLessThan(Double price) {
+        return repository.findByPriceLessThan(price)
                 .stream()
                 .map(ProductMapper::toResponseDto)
                 .toList();
-
     }
 }
