@@ -10,9 +10,14 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 
 @Service
 @AllArgsConstructor
@@ -31,11 +36,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponseDto> getAllProducts() {
-        return repository.findAll()
-                .stream()
-                .map(ProductMapper::toResponseDto)
-                .toList();
+    public Page<ProductResponseDto> getAllProducts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name"));
+        Page<Product> pageProduct = repository.findAll(pageable);
+                return pageProduct.map(ProductMapper::toResponseDto);
     }
 
     @Override
@@ -62,5 +66,14 @@ public class ProductServiceImpl implements ProductService {
         ProductMapper.updateEntity(product, dto);
         Product updated = repository.save(product);
         return ProductMapper.toResponseDto(updated);
+    }
+
+    @Override
+    public List<ProductResponseDto> findByName(String name) {
+        return repository.findByName(name)
+                .stream()
+                .map(ProductMapper::toResponseDto)
+                .toList();
+
     }
 }

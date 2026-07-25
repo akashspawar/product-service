@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,8 +51,9 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductResponseDto>> getAll() {
-        List<ProductResponseDto> allProducts = service.getAllProducts();
+    public ResponseEntity<Page<ProductResponseDto>> getAll(@RequestParam(defaultValue = "0")int page,
+                                                           @RequestParam(defaultValue = "5")int size) {
+        Page<ProductResponseDto> allProducts = service.getAllProducts(page,size);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(
                         ResponseBuilder.success(
@@ -103,4 +105,17 @@ public class ProductController {
                 )
         );
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<List<ProductResponseDto>>> searchByName(@RequestParam String name) {
+        List<ProductResponseDto> byName = service.findByName(name);
+        return ResponseEntity.ok(
+                ResponseBuilder.success(
+                        "Fetch date using Name.........",
+                        byName,
+                        HttpStatus.OK
+                )
+        );
+    }
+
 }
