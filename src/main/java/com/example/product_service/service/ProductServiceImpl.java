@@ -2,10 +2,13 @@ package com.example.product_service.service;
 
 import com.example.product_service.dto.ProductRequestDto;
 import com.example.product_service.dto.ProductResponseDto;
+import com.example.product_service.dto.RegisterRequestDto;
 import com.example.product_service.entity.Product;
+import com.example.product_service.entity.User;
 import com.example.product_service.exception.ProductNotFoundException;
 import com.example.product_service.mapper.ProductMapper;
 import com.example.product_service.repository.ProductRepository;
+import com.example.product_service.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -25,6 +28,10 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository repository;
+
+    private final UserRepository userRepository;
+
+
 
     private static final Logger logs = LoggerFactory.getLogger(ProductServiceImpl.class);
 
@@ -69,8 +76,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponseDto> findByPriceLessThan(Double price) {
-        return repository.findByPriceLessThan(price)
+    public List<ProductResponseDto> findByPriceGreaterThan(Double price) {
+        return repository.findByPriceGreaterThan(price)
                 .stream()
                 .map(ProductMapper::toResponseDto)
                 .toList();

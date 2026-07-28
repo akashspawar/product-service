@@ -1,9 +1,7 @@
 package com.example.product_service.controller;
 
-import com.example.product_service.dto.ApiResponse;
-import com.example.product_service.dto.ProductRequestDto;
-import com.example.product_service.dto.ProductResponseDto;
-import com.example.product_service.dto.ResponseBuilder;
+import com.example.product_service.dto.*;
+import com.example.product_service.entity.User;
 import com.example.product_service.service.ProductService;
 import com.example.product_service.entity.Product;
 import io.swagger.v3.oas.annotations.Operation;
@@ -108,7 +106,7 @@ public class ProductController {
 
     @GetMapping("/GreaterThanPrice")
     public ResponseEntity<ApiResponse<List<ProductResponseDto>>> priceGreaterThan(@RequestParam Double price){
-        List<ProductResponseDto> byPriceLessThan = service.findByPriceLessThan(price);
+        List<ProductResponseDto> byPriceLessThan = service.findByPriceGreaterThan(price);
         return ResponseEntity.ok(
                 ResponseBuilder.success(
                         "getting conditional result",
@@ -117,5 +115,4 @@ public class ProductController {
                 )
         );
     }
-
 }

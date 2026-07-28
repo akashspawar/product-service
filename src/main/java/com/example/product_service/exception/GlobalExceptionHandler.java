@@ -1,5 +1,7 @@
 package com.example.product_service.exception;
 
+import com.example.product_service.dto.ApiResponse;
+import com.example.product_service.dto.ResponseBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -34,5 +36,26 @@ public class GlobalExceptionHandler {
                         errors.put(error.getField(), error.getDefaultMessage()));
 
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUserAlreadyExists(UserAlreadyExistsException ex){
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ResponseBuilder.error(
+                        ex.getMessage(),
+                        HttpStatus.CONFLICT
+                ));
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiResponse<Void>> handleBadCredentials(
+            BadCredentialsException ex) {
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ResponseBuilder.error(
+                        "Invalid username or password",
+                        HttpStatus.UNAUTHORIZED
+                ));
     }
 }

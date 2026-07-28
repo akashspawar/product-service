@@ -20,4 +20,15 @@ public class ResponseBuilder {
 
         return response;
     }
+
+    public static <T> ApiResponse<T> error(String message, HttpStatus status) {
+
+        ApiResponse<T> response = new ApiResponse<>();
+      //  response.setSuccess(false);
+        response.setMessage(message);
+        response.setData(null);
+        response.setStatus(status.value());
+
+        return response;
+    }
 }
