@@ -1,9 +1,7 @@
 package com.example.product_service.controller;
 
 import com.example.product_service.dto.*;
-import com.example.product_service.entity.User;
 import com.example.product_service.service.ProductService;
-import com.example.product_service.entity.Product;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -51,6 +49,7 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<Page<ProductResponseDto>> getAll(@RequestParam(defaultValue = "0")int page,
                                                            @RequestParam(defaultValue = "5")int size) {
+        System.out.println("Inside getAllProducts()");
         Page<ProductResponseDto> allProducts = service.getAllProducts(page,size);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(

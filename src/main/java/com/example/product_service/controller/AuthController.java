@@ -1,7 +1,6 @@
 package com.example.product_service.controller;
 
 import com.example.product_service.dto.*;
-import com.example.product_service.entity.User;
 import com.example.product_service.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
