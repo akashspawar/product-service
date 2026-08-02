@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 @EnableWebSecurity
@@ -24,13 +25,36 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                /* .authorizeHttpRequests(auth -> auth
+                         .requestMatchers("/auth/**").permitAll()
+                         .anyRequest().authenticated()
+                 )
+                 .addFilterBefore(jwtFilter,
+                         UsernamePasswordAuthenticationFilter.class);
+         return http.build();*/
                 .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers("/auth/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/products/**")
+                        .hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/products/**")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.PUT, "/products/**")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.DELETE, "/products/**")
+                        .hasRole("ADMIN")
+
                         .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtFilter,
-                        UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+                ).addFilterBefore(
+                jwtFilter,
+                UsernamePasswordAuthenticationFilter.class
+                );
+                return http.build();
+
     }
 
     @Bean
